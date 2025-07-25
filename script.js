@@ -1,6 +1,6 @@
 class FoodWheel {
     constructor() {
-        this.foods = ['Pizza', 'Hambúrguer', 'Sushi', 'Tacos', 'Lasanha', 'Salada'];
+        this.foods = ['Xis do Bayer', 'Hambúrguer do Bily', 'Sushi do MR vini', 'Hambúrguer do Family', 'Sabor Caseiro', 'Gole e Gula'];
         this.history = JSON.parse(localStorage.getItem('foodHistory')) || [];
         this.canvas = document.getElementById('wheelCanvas');
         this.ctx = this.canvas.getContext('2d');
