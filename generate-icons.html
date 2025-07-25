@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerador de Ícones</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        .icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
+        .icon-item { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Gerador de Ícones - Roleta de Comidas</h1>
+    <p>Clique com o botão direito em cada ícone e salve com o nome indicado:</p>
+    
+    <div class="icon-grid" id="iconGrid"></div>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // White circle background
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/2.5, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw wheel segments
+            const segments = 6;
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+            const anglePerSegment = (2 * Math.PI) / segments;
+            
+            for (let i = 0; i < segments; i++) {
+                const startAngle = i * anglePerSegment;
+                const endAngle = startAngle + anglePerSegment;
+                
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.moveTo(size/2, size/2);
+                ctx.arc(size/2, size/2, size/3, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = size/100;
+                ctx.stroke();
+            }
+            
+            // Center circle
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/12, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Food emoji in center
+            ctx.fillStyle = '#333';
+            ctx.font = `${size/8}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🍽️', size/2, size/2);
+            
+            return canvas;
+        }
+        
+        const iconGrid = document.getElementById('iconGrid');
+        
+        sizes.forEach(size => {
+            const canvas = createIcon(size);
+            const container = document.createElement('div');
+            container.className = 'icon-item';
+            container.innerHTML = `
+                <h3>icon-${size}.png</h3>
+                <div>${canvas.outerHTML}</div>
+                <p>${size}x${size}px</p>
+            `;
+            iconGrid.appendChild(container);
+        });
+    </script>
+</body>
+</html>
